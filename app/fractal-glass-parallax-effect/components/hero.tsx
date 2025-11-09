@@ -1,14 +1,12 @@
-import Image from "next/image";
+import { Canvas } from "./canvas";
 
 export function Hero() {
   return (
-    <section className="hero-section">
-      <div className="glass-texture hidden">
-        <Image src={"/glassTexture.jpg"} width={500} height={500} alt="" />
-      </div>
-      <div className="hero-content absolute left-0 bottom-0 w-full flex justify-between">
-        <h1 className="w-xl">Fractal Glass Parallax Effect</h1>
-        <p> Fractal Glass Parallax Effect </p>
+    <section className="hero-section relative w-full h-screen overflow-hidden">
+      <Canvas />
+      <div className="hero-content absolute left-0 bottom-0 w-full flex justify-between p-8 text-white">
+        <h1 className="text-4xl font-bold">Fractal Glass Parallax Effect</h1>
+        <p>Move your mouse to interact ✨</p>
       </div>
     </section>
   );
