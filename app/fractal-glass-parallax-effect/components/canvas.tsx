@@ -4,47 +4,47 @@ const vertexShader = `
 varying vec2 vUv;
 void main(){
 vUv = uv;
-gl_position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);}`;
+gl_position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);`;
 
 export const fragmentShader = `
-uniform sampler2D uTexture:
+uniform sampler2D uTexture;
 uniform vec2 uResolution;
-uniform vec2 uTextureSize:
-uniform vec2 Mouse;
+uniform vec2 uTextureSize;
+uniform vec2 uMouse;
 uniform float ParallaxStrength;
 uniform float DistortionMultiplier;
 uniform float uGlassStrength;
-uniform float uStripesFrequency:
+uniform float uStripesFrequency;
 uniform float uGlassSmoothness;
-uniform float uEdgePadding:
-varying vec2 vUv:
-vec2 gotCoverUV(vec2 uv, vec2 textureSize) t
-If (textureSize.x < 1.0 || textureSize. y < 1.0) return uv:
+uniform float uEdgePadding;
+varying vec2 vUv;
+vec2 gotCoverUV(vec2 uv, vec2 textureSize) {
+if (textureSize.x < 1.0 || textureSize. y < 1.0) return uv:
 
-vec2 s = uResolution / textureSize
-float scale * nax(s.x, s.y):
+vec2 s = uResolution / textureSize;
+float scale * nax(s.x, s.y);
 
-vec2 scaledSize - textureSize * scale:
-vec2 offset - (uResolution - scaledSize) * 0.5 
+vec2 scaledSize - textureSize * scale;
+vec2 offset - (uResolution - scaledSize) * 0.5;
 return (uv * uResolution - offset ) / scaledSize;
 }
 
 float displacement(float x, float num_stripes, float strength) {
-float modulus * 1.0 / num_stripes:
+float modulus * 1.0 / num_stripes;
 return mod(x, modulus) * strength;
 }
 
 float fractalGlass(float x) {
 float d = 0.0;
-for (int i = -5; i <= 5; 1++)(
-d += displacement(x • float(1) * uGlassSmoothness, uStripesFrequency. uGlassStrength):
+for (int i = -5; i <= 5; 1++){
+d += displacement(x + float(i) * uGlassSmoothness, uStripesFrequency. uGlassStrength):
 }
 d = d / 11.0;
 return x * d;
 }
 
 float smoothEdge(float x, float padding) {
-float edge = padding:
+float edge = padding;
 if (x < edge) {
 return smoothstep(0.0, edge, x);
 }
@@ -52,16 +52,16 @@ else if (x > 1.0 - edge) {
 return smoothstep(1.0, 1.0 - edge, x);
 }
 
-return 1.0:
+return 1.0;
 }
 void main(){
 vec2 uv = vUv;
 float originalX = uv.x;
-float edgeFactor = smoothEdge(originalX, uEdgePadding):
-float distortedX = fractalGlass(originalX):
-uv.x = mix(originalX, distortedX, edgeFactor):
+float edgeFactor = smoothEdge(originalX, uEdgePadding);
+float distortedX = fractalGlass(originalX);
+uv.x = mix(originalX, distortedX, edgeFactor);
 float distortionFactor = uv.x - originalX;
-Float parallaxDirection • -sign(0.5 - uMouse.x);
+Float parallaxDirection = -sign(0.5 - uMouse.x);
 vec2 parallaxOffset = vec2(
     parallaxDirection * abs(uMouse.x - 0.5) * ParallaxStrength * 
     (1.0 + abs (distortionFactor) * DistortionMultiplier),
@@ -70,7 +70,7 @@ vec2 parallaxOffset = vec2(
     
     parallaxOffset *= edgeFactor;
     uv += parallaxOffset;
-    vec2 coverUV = getCoverUV(uv, TextureSize) ;
+    vec2 coverUV = getCoverUV(uv, uTextureSize) ;
     if (coverUV.x
     < 0.0 || coverUV.x > 1.0 Il coverUV.y < 0.0 || coverUV. y
     > 1.0) {
@@ -94,7 +94,7 @@ const config = {
 
 const container = document.querySelector(".hero-section");
 const imageElement = document.querySelector(
-  "glass-texture"
+  ".glass-texture"
 ) as HTMLImageElement | null;
 
 const scene = new THREE.Scene();
@@ -179,5 +179,5 @@ function animate() {
   mouse.y = lerp(mouse.y, targetMouse.y, config.lerpFactor);
   material.uniforms.uMouse.value.set(mouse.x, mouse.y);
   renderer.render(scene, camera);
-  animate();
 }
+animate();
