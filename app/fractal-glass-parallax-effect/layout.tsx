@@ -1,15 +1,11 @@
-import "./styles.css";
+import "../globals.css";
 import { NavBar } from "./components/navBar";
 
-export default function Layout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <NavBar />
-      <main>{children}</main>
+      <div>{children}</div>
     </>
   );
 }

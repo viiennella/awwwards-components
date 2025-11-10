@@ -143,6 +143,11 @@ export function Canvas() {
       targetMouse.y = 1.0 - e.clientY / window.innerHeight;
     }
 
+    function onTouchMove(e: TouchEvent) {
+      targetMouse.x = e.touches[0].clientX / window.innerWidth;
+      targetMouse.y = 1.0 - e.touches[0].clientY / window.innerHeight;
+    }
+
     function onResize() {
       renderer.setSize(window.innerWidth, window.innerHeight);
       material.uniforms.uResolution.value.set(
@@ -152,6 +157,7 @@ export function Canvas() {
     }
 
     window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onTouchMove);
     window.addEventListener("resize", onResize);
 
     function animate() {
@@ -166,6 +172,7 @@ export function Canvas() {
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", onResize);
       container.removeChild(renderer.domElement);
       renderer.dispose();
@@ -174,5 +181,10 @@ export function Canvas() {
     };
   }, []);
 
-  return <div ref={containerRef} className="absolute inset-0" />;
+  return (
+    <div
+      ref={containerRef}
+      className="absolute inset-0 overflow-hidden touch-none"
+    />
+  );
 }

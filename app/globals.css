@@ -234,3 +234,12 @@ pre {
   padding: 1em;
   overflow-x: auto;
 }
+.fractal-layout a,
+p {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 550;
+  line-height: 1;
+  display: inline-block;
+}
