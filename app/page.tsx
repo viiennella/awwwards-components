@@ -14,6 +14,10 @@ export default function Home() {
       href: "/hover-text-picture-popup",
       label: "Hover Text Picture Popup ",
     },
+    {
+      href: "/scroll-motion-slider",
+      label: "Scroll Motion Slider ",
+    },
   ];
   return (
     <div>
