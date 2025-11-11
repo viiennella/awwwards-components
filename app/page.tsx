@@ -10,6 +10,10 @@ export default function Home() {
       href: "/fractal-glass-parallax-effect",
       label: "Fractal Glass Parallax Effect",
     },
+    {
+      href: "/hover-text-picture-popup",
+      label: "Hover Text Picture Popup ",
+    },
   ];
   return (
     <div>

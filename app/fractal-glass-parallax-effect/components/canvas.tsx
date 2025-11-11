@@ -78,7 +78,7 @@ void main() {
 }
 `;
 
-export function Canvas() {
+export function FractalGlassCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
