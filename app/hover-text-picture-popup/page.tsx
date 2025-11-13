@@ -90,14 +90,9 @@ export default function HoverTextPicturePopup() {
     const tl = gsap.timeline();
 
     tl.to(img, {
-      scale: 1,
-      opacity: 0.1,
-      duration: 0.5,
-      ease: "power2.out",
-    }).to(img, {
-      scale: 1.1,
+      scale: 1.25,
       opacity: 0,
-      duration: 0.25,
+      duration: 0.5,
       ease: "power2.out",
     });
   };

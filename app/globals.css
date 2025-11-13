@@ -71,6 +71,10 @@ h6 {
 }
 
 /* 3️⃣ Paragraphs & Text */
+p {
+  margin: 0 0 1em;
+  max-width: 70ch;
+}
 
 a {
   color: #0070f3;
@@ -264,4 +268,203 @@ pre {
 .hover-underline-animation:hover::after {
   transform: scaleX(1); /* Expands the underline to full width on hover */
   transform-origin: left; /* Changes the origin for the return animation */
+}
+
+/* Scroll Motion Slider */
+
+.scroll-motion-slider {
+  font-family: "Poppins", sans-serif;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  h1 {
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.1rem;
+  }
+  p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.1rem;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  nav {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding: 2rem;
+    z-index: 2;
+  }
+  nav p {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+    font-size: 1.2rem;
+    color: #bababa;
+  }
+  .logo {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+
+    padding: 0.5rem 1rem;
+  }
+  section {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .intro,
+  .outro {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: #000;
+  }
+  .intro h1,
+  .outro h1 {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.1rem;
+    color: #fff;
+  }
+  .slider-images {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .slider-images::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+  }
+  .slider-images img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .slider-title {
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #fff;
+    width: 50%;
+  }
+
+  .slider-indicator {
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    transform: translateX(-50%);
+  }
+
+  .slider-indices {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .slider-indices p {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+  }
+  .index {
+    position: relative;
+    display: flex;
+    width: 1.25rem;
+    justify-content: flex-end;
+    will-change: opacity;
+  }
+  .marker {
+    position: relative;
+    width: 0.75rem;
+    height: 1px;
+    background-color: #fff;
+    transform-origin: right;
+    will-change: transform;
+    transform: scaleX(0);
+  }
+  .slider-progress-bar {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    top: 0;
+    right: 0;
+  }
+  .slider-progress {
+    position: absolute;
+    width: 3px;
+    height: 100%;
+    background-color: #fff;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    will-change: transform;
+  }
+  .line {
+    position: relative;
+    display: block;
+    will-change: transform;
+  }
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    nav {
+      display: none;
+    }
+    .intro h1,
+    .outro h1 {
+      width: 100%;
+    }
+    .slider-title {
+      top: 5rem;
+      left: 0;
+      width: 100%;
+      transform: none;
+      padding: 2rem;
+    }
+    .slider-indicator {
+      top: unset;
+      bottom: 2rem;
+      transform: none;
+    }
+  }
 }
