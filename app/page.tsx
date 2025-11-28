@@ -18,6 +18,10 @@ export default function Home() {
       href: "/scroll-motion-slider",
       label: "Scroll Motion Slider ",
     },
+    {
+      href: "/radaville-image-gallery",
+      label: "Radaville Image Gallery",
+    },
   ];
   return (
     <div>
