@@ -78,6 +78,7 @@ export default function RadavilleImageGallery() {
   const isAnimating = useRef(false);
   const currentIndexRef = useRef(0);
   const minimapIndexRef = useRef(1);
+  const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Refs for navigation functions
   const goNextRef = useRef<() => void>(() => {});
@@ -89,16 +90,14 @@ export default function RadavilleImageGallery() {
     minimapIndexRef.current = minimapIndex;
   }, [currentIndex, minimapIndex]);
 
-  // Auto-hide UI hints after delay, reappearing on navigation
+  // Cleanup hint timer on unmount
   useEffect(() => {
-    setShowHints(true);
-
-    const timer = setTimeout(() => {
-      setShowHints(false);
-    }, UI_CONFIG.HINTS_AUTO_HIDE_DELAY);
-
-    return () => clearTimeout(timer);
-  }, [currentIndex]);
+    return () => {
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current);
+      }
+    };
+  }, []);
 
   useGSAP(
     () => {
@@ -204,6 +203,15 @@ export default function RadavilleImageGallery() {
       const navigate = (dir: "next" | "prev") => {
         if (isAnimating.current) return;
         isAnimating.current = true;
+
+        // Show hints and schedule auto-hide
+        setShowHints(true);
+        if (hintTimerRef.current) {
+          clearTimeout(hintTimerRef.current);
+        }
+        hintTimerRef.current = setTimeout(() => {
+          setShowHints(false);
+        }, UI_CONFIG.HINTS_AUTO_HIDE_DELAY);
 
         const delta = dir === "next" ? 1 : -1;
         const target =
@@ -343,6 +351,13 @@ export default function RadavilleImageGallery() {
         duration: ANIMATION_CONFIG.FADE_IN_DURATION,
         ease: ANIMATION_CONFIG.FADE_IN_EASE,
       });
+
+      // Show hints on initial load and schedule auto-hide
+      setShowHints(true);
+      hintTimerRef.current = setTimeout(() => {
+        setShowHints(false);
+      }, UI_CONFIG.HINTS_AUTO_HIDE_DELAY);
+
       return () => {
         window.removeEventListener("keydown", handleKey);
         window.removeEventListener("resize", handleResize);
