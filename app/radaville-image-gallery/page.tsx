@@ -57,9 +57,11 @@ const debounce = <T extends (...args: unknown[]) => void>(
   fn: T,
   delay: number,
 ): ((...args: Parameters<T>) => void) => {
-  let timeoutId: ReturnType<typeof setTimeout>;
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
   return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
     timeoutId = setTimeout(() => fn(...args), delay);
   };
 };
@@ -79,10 +81,12 @@ export default function RadavilleImageGallery() {
   const currentIndexRef = useRef(0);
   const minimapIndexRef = useRef(1);
   const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const imagesLoadedRef = useRef(0);
 
   // Refs for navigation functions
   const goNextRef = useRef<() => void>(() => {});
   const goPrevRef = useRef<() => void>(() => {});
+  const recalculateParallaxRef = useRef<(() => void) | null>(null);
 
   // Sync state with refs for use in callbacks
   useEffect(() => {
@@ -288,6 +292,11 @@ export default function RadavilleImageGallery() {
 
       let parallax = calculateParallaxBounds();
 
+      // Store recalculate function for use in image onLoad handlers
+      recalculateParallaxRef.current = () => {
+        parallax = calculateParallaxBounds();
+      };
+
       // Debounced resize handler to recalculate parallax bounds
       const handleResize = debounce(() => {
         parallax = calculateParallaxBounds();
@@ -298,10 +307,9 @@ export default function RadavilleImageGallery() {
       // Setup pointer observer for parallax effect and click navigation
       const hasFinePointer = matchMedia("(pointer: fine)").matches;
       const canHover = matchMedia("(hover: hover)").matches;
-
       const isMouse = hasFinePointer && canHover;
 
-      Observer.create({
+      const pointerObserver = Observer.create({
         type: "pointer",
         target: containerRef.current!,
         tolerance: 10,
@@ -328,7 +336,7 @@ export default function RadavilleImageGallery() {
       });
 
       // Touch/swipe support for mobile devices
-      Observer.create({
+      const touchObserver = Observer.create({
         type: "touch",
         target: containerRef.current!,
         onLeft: () => goNextRef.current(),
@@ -361,6 +369,8 @@ export default function RadavilleImageGallery() {
       return () => {
         window.removeEventListener("keydown", handleKey);
         window.removeEventListener("resize", handleResize);
+        pointerObserver.kill();
+        touchObserver.kill();
       };
     },
     { scope: containerRef },
@@ -451,6 +461,19 @@ export default function RadavilleImageGallery() {
                 className="h-auto min-h-screen w-auto max-w-none min-w-screen"
                 priority={i === 0}
                 sizes="100vw"
+                onLoad={() => {
+                  // Recalculate parallax when each image loads
+                  imagesLoadedRef.current += 1;
+                  if (
+                    imagesLoadedRef.current >= images.length &&
+                    recalculateParallaxRef.current
+                  ) {
+                    // Small delay to ensure all images are fully rendered
+                    setTimeout(() => {
+                      recalculateParallaxRef.current?.();
+                    }, 100);
+                  }
+                }}
               />
             </div>
           </div>
